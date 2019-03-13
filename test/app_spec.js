@@ -3,15 +3,16 @@ const expect = chai.expect;
 let app = require("../app");
 const jsonObj = require("../model.json");
 const proxyquire = require("proxyquire");
+const utilities = require("../utilities")
 
-describe('Checks the number of views', function () {
+describe('Checks the Main function number of views found for a selector', function () {
 
     it('returns true if 6 classNames contain .container attribute', function () {
         let selectors = [{
             key: "classNames",
             val: "container"
         }];
-        let result = app.main(jsonObj, selectors)
+        let result = utilities.main(jsonObj, selectors)
         expect(result.length).to.equal(6);
     });
     it('returns true if 26 classes contain Input attribute', function () {
@@ -19,7 +20,7 @@ describe('Checks the number of views', function () {
             key: "class",
             val: "Input"
         }];
-        var result = app.main(jsonObj, selectors)
+        var result = utilities.main(jsonObj, selectors)
         expect(result.length).to.equal(26);
     });
 
@@ -28,7 +29,7 @@ describe('Checks the number of views', function () {
             key: "class",
             val: "StackView"
         }];
-        var result = app.main(jsonObj, selectors)
+        var result = utilities.main(jsonObj, selectors)
         expect(result.length).to.equal(6);
     });
     it('returns true if 1 identifier contains #videoMode attribute', function () {
@@ -36,7 +37,7 @@ describe('Checks the number of views', function () {
             key: "identifier",
             val: "videoMode"
         }];
-        let result = app.main(jsonObj, selectors)
+        let result = utilities.main(jsonObj, selectors)
         expect(result.length).to.equal(1);
     });
 
@@ -53,19 +54,19 @@ describe('Checks the number of views', function () {
             }
             // // {key: "classNames", val:"Input"}
         ];
-        let result = app.main(jsonObj, selectors)
+        let result = utilities.main(jsonObj, selectors)
         expect(result.length).to.equal(3);
     });
 })
 
-describe('Checks the fileName', function () {
+describe('Checks for the fileName', function () {
     it('finds a filename called model.json', function (done) {
         // mockup file name
         let fileName = "model.json";
         //call async function readFile passing mocked filename
         // handle async return promise object with .then or reject with .catch 
 
-        app.readFile(fileName).then((content) => {
+        utilities.readFile(fileName).then((content) => {
             expect(content["identifier"]).to.equal("System");
             done();
         }).catch(err => {
@@ -79,7 +80,7 @@ describe('Checks the fileName', function () {
         //call async function readFile passing mocked filename
         // handle async return promise object with .then or reject with .catch 
 
-        app.readFile(fileName).then((content) => {}).catch(err => {
+        utilities.readFile(fileName).then((content) => {}).catch(err => {
             expect(err.message).to.equal("Unexpected token e in JSON at position 1")
             done()
         })
@@ -100,11 +101,11 @@ describe('Checks the pure functions', function () {
             }
         }
 
-        let app = proxyquire("../app", {
+        let utilities = proxyquire("../utilities", {
             "inquirer": mockInquirer
         });
 
-        let userInput = app.getPrompts()
+        let userInput = utilities.getPrompts()
             .then(userInput => {
                 expect(userInput).to.equal("StackView");
                 done();
@@ -124,11 +125,11 @@ describe('Checks the pure functions', function () {
             }
         }
 
-        let app = proxyquire("../app", {
+        let utilities = proxyquire("../utilities", {
             "inquirer": mockInquirer
         });
 
-        let userInput = app.getPrompts()
+        let userInput = utilities.getPrompts()
             .then(userInput => {
                 expect(userInput).to.equal("VideoModeSelect#videoMode");
                 done();
@@ -137,20 +138,20 @@ describe('Checks the pure functions', function () {
 
     it('checks if function checkInput returns selector key classNames given .container - removes #', function () {
         let str = ".container";
-        let key = app.checkInput(str);
+        let key = utilities.checkInput(str);
         expect(key).to.equal("classNames");
 
     })
 
     it('checks if function valArrayFunc returns array of vals given any selector combination', function () {
         let str = "VideoModeSelect#videoMode";
-        let valArray = app.valArrayFunc(str);
+        let valArray = utilities.valArrayFunc(str);
         expect(valArray[1]).to.equal("#videoMode");
         str = "CvarSelect#windowMode";
-        valArray = app.valArrayFunc(str);
+        valArray = utilities.valArrayFunc(str);
         expect(valArray[1]).to.equal("#windowMode");
         str = "StackView";
-        valArray = app.valArrayFunc(str);
+        valArray = utilities.valArrayFunc(str);
         expect(valArray[0]).to.equal("StackView");
     })
 })
