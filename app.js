@@ -155,11 +155,11 @@ function getPrompts() {
                     required: true
                 }
             ])
-            // what returns form that is a promise and we are catching that promise with a then
-            .then(function (inquirerResponse) { // when promise executes
+            // This returns an asynch promise when done, and we catch that promise with a .then
+            .then(function (inquirerResponse) { // when promise completes
                 console.log(inquirerResponse)
                 resolve(inquirerResponse.selector);
-            }).catch(function (err) {
+            }).catch(function (err) {//catch the error if invalid user selector entered
                 console.log(err);
                 reject(err);
             })

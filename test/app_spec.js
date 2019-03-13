@@ -1,7 +1,8 @@
-var chai = require('chai');
-var expect = chai.expect;
-const app = require("../app");
+const chai = require('chai');
+const expect = chai.expect;
+let app = require("../app");
 const jsonObj = require("../model.json");
+const proxyquire = require("proxyquire");
 
 describe('Checks the number of views', function () {
 
@@ -71,6 +72,7 @@ describe('Checks the fileName', function () {
             console.log(err);
         })
     });
+
     it('finds a bad file', function (done) {
         // mockup file name
         let fileName = "test.txt";
@@ -82,29 +84,73 @@ describe('Checks the fileName', function () {
             done()
         })
     });
-
 });
 
-describe('Checks function getPrompts returns selectors', function () {
-    it('checks if function getPromts returns selector StackView', function () {
-        let userInput = app.getPrompts();
-        expect(userInput).to.equal("StackView");
-        done();
+describe('Checks the pure functions', function () {
+
+    it('checks if function getPrompts returns selector StackView', function (done) {
+        let mockInquirer = {
+            prompt(options) {
+                return new Promise((resolve, reject) => {
+                    expect(options[0].message).to.equal("Please enter selector here")
+                    resolve({
+                        selector: "StackView"
+                    })
+                })
+            }
+        }
+
+        let app = proxyquire("../app", {
+            "inquirer": mockInquirer
+        });
+
+        let userInput = app.getPrompts()
+            .then(userInput => {
+                expect(userInput).to.equal("StackView");
+                done();
+            })
     })
 
-    it('checks if function checkInput returns selector key', function () {
+
+    it('checks if function getPrompts returns selector VideoModeSelect#videoMode', function (done) {
+        let mockInquirer = {
+            prompt(options) {
+                return new Promise((resolve, reject) => {
+                    expect(options[0].message).to.equal("Please enter selector here")
+                    resolve({
+                        selector: "VideoModeSelect#videoMode"
+                    })
+                })
+            }
+        }
+
+        let app = proxyquire("../app", {
+            "inquirer": mockInquirer
+        });
+
+        let userInput = app.getPrompts()
+            .then(userInput => {
+                expect(userInput).to.equal("VideoModeSelect#videoMode");
+                done();
+            })
+    })
+
+    it('checks if function checkInput returns selector key classNames given .container - removes #', function () {
         let str = ".container";
         let key = app.checkInput(str);
-        expect(key).to.equal("container");
-       
+        expect(key).to.equal("classNames");
+
     })
-   
-    it.only('checks if function valArrayFunc returns array of vals', function () {
+
+    it('checks if function valArrayFunc returns array of vals given any selector combination', function () {
         let str = "VideoModeSelect#videoMode";
         let valArray = app.valArrayFunc(str);
         expect(valArray[1]).to.equal("#videoMode");
-         str = "CvarSelect#windowMode";
-         valArray = app.valArrayFunc(str);
+        str = "CvarSelect#windowMode";
+        valArray = app.valArrayFunc(str);
         expect(valArray[1]).to.equal("#windowMode");
+        str = "StackView";
+        valArray = app.valArrayFunc(str);
+        expect(valArray[0]).to.equal("StackView");
     })
 })
