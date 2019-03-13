@@ -1,29 +1,39 @@
-json parse command line app
+This is a json parse NodeJS command line app
 
 ### To clone: 
+[https://github.com/louise-hayes/json-parse-node-app.git](githib)
+
+you must run npm install to install all dependencies:
 
 ```
 npm install
 ```
 
 
-JSON is local on model.json and also at :
-[https://jsonblob.com/e6c807db-4497-11e9-b3db-cb890192ffc6](Json object)
+### What this app does:
+A JSON object [https://jsonblob.com/e6c807db-4497-11e9-b3db-cb890192ffc6](Json object) is parsed and searched for user selectors that are input via prompt.
 
-### to run test with Mocha
+This app assumes the json object is local file.
+
+### Tests 
+This app uses Mocha and Chai testing tool.
+test files are in /test
+
+To run tests
 
 ```
 npm test
 ```
 
 ### to run app
+
 ```
-npm start
+node app.js model.json
 ```
-### sample input
-```
-node app.js StackView
-```
+
+### Prompts:
+
+
 
 ### expected output
 6 items:

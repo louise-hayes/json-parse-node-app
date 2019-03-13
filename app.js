@@ -1,32 +1,59 @@
 const fs = require("fs");
+const inquirer = require("inquirer");
 let result = [];
 let userInput = process.argv;
 let searchItem = [];
 let jsonObj = {};
 let fileName = "";
 
-// Capture all the userInput (ignore first 2 i.e. node app.js)
+// 1 :-  Capture all the userInput from the "node app.js model.js" command (ignore first 2 i.e. node app.js)
 for (var i = 2; i < userInput.length; i++) {
-
-    // Obtain the user input parameters after node app.js (filename)
+    // Obtain the user input parameters after node app.js <filename>
     fileName = userInput[i];
 };
 
-readFile(fileName).then(content => {
-    let selectors = [{
-        key: "class",
-        val: "StackView"
-    }];
-    // to do prompt for selectors
-    //call main function, pass jsonObJ and selectors required
-    var result = main(content, selectors);
-    console.log("there are " + result.length + " items:");
-    console.log(result)
+// 2 :- call async function readFile: read the file passed in by user (model.json)
+readFile(fileName)
+    .then(content => {
+        console.log("2: read file");
+        // 3 :- prompt user for selectors
+        
+        getPrompts()
+            .then(input => {
+                console.log("3:- have prompts going to valArrayFunc " + input)
+                let selectors = [];
+                let valArray = valArrayFunc(input);
 
-}).catch(err => {
-    console.log(err.message);
+                valArray.forEach(val => {
+                    let key = checkInput(val);
+                    val = val.replace(/[#.]/g, '')
+                    selectors.push({
+                        key: key,
+                        val: val
+                    });
+                });
+                console.log(selectors);
 
-});
+                // 4 :- call main function, pass jsonObJ and selectors
+                // result - > show to user
+                var result = main(content, selectors);
+                console.log("----------------------------------------------------------------")
+                console.log("                                RESULTS                         ")
+                console.log("----------------------------------------------------------------")
+
+                console.log(result)
+                console.log("----------------------------------------------------------------")
+                
+                console.log("there are " + result.length + " items:");
+            })
+            .catch(err => {
+                console.log("error in input " + err)
+            });
+
+
+    }).catch(err => {
+        console.log(err.message + " -please ensure you are specifying a JSON file");
+    });
 
 //Async function to read the JSON file specified by user from filesystem
 // parse file to JSON format
@@ -38,21 +65,14 @@ function readFile(fileName) {
                 return reject(err);
             }
             try {
-                let dataObj=JSON.parse(data);
+                let dataObj = JSON.parse(data);
                 resolve(dataObj)
-            }
-            catch(e){
+            } catch (e) {
                 reject(e);
             }
-            
         })
     })
-
-
 }
-
-//export the function to other modules (e.g. app_spec.js test file requires it)
-module.exports.readFile = readFile;
 
 
 //add function here to check which selector (single, compound or chained)
@@ -122,5 +142,63 @@ function selectorMatches(jsonNode, key, val) {
     return false;
 }
 
-//export the function main() to other modules
+// function to get selectors from user prompt
+function getPrompts() {
+    return new Promise(function (resolve, reject) {
+        inquirer
+            .prompt([
+                // Here we create a basic text prompt to get user selection criteria.
+                {
+                    type: "input",
+                    message: "Please enter selector here",
+                    name: "selector",
+                    required: true
+                }
+            ])
+            // what returns form that is a promise and we are catching that promise with a then
+            .then(function (inquirerResponse) { // when promise executes
+                console.log(inquirerResponse)
+                resolve(inquirerResponse.selector);
+            }).catch(function (err) {
+                console.log(err);
+                reject(err);
+            })
+    })
+}
+
+// function to take user attribute and determine selector key for attribute
+function checkInput(input) {
+    if (input.includes(".")) {
+        key = "classNames";
+    } else if (input.includes("#")) {
+        key = "identifier";
+    } else {
+        key = "class";
+    }
+    return key;
+}
+
+// function to put vals into an array
+function valArrayFunc(input) {
+    if (input[0] === ".") {
+        return [input]
+    } else
+    if (input[0] === "#") {
+
+        return [input]
+    } else if (input.includes("#")) {
+        let valArray = input.split("#");
+        valArray[1] = "#" + valArray[1];
+        return valArray;
+    } else {
+        return [input]
+    }
+}
+
+
+//export the function to other modules (e.g. app_spec.js test file requires it)
+module.exports.readFile = readFile;
+module.exports.getPrompts = getPrompts;
+module.exports.valArrayFunc = valArrayFunc;
+module.exports.checkInput = checkInput;
 module.exports.main = main;

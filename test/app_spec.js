@@ -1,7 +1,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 const app = require("../app");
-const jsonObj = require("../model.json")
+const jsonObj = require("../model.json");
 
 describe('Checks the number of views', function () {
 
@@ -63,7 +63,7 @@ describe('Checks the fileName', function () {
         let fileName = "model.json";
         //call async function readFile passing mocked filename
         // handle async return promise object with .then or reject with .catch 
-         
+
         app.readFile(fileName).then((content) => {
             expect(content["identifier"]).to.equal("System");
             done();
@@ -76,12 +76,35 @@ describe('Checks the fileName', function () {
         let fileName = "test.txt";
         //call async function readFile passing mocked filename
         // handle async return promise object with .then or reject with .catch 
-         
-        app.readFile(fileName).then((content) => {
-        }).catch(err => {
-        expect(err.message).to.equal("Unexpected token e in JSON at position 1")
-        done()
+
+        app.readFile(fileName).then((content) => {}).catch(err => {
+            expect(err.message).to.equal("Unexpected token e in JSON at position 1")
+            done()
         })
     });
-   
+
 });
+
+describe('Checks function getPrompts returns selectors', function () {
+    it('checks if function getPromts returns selector StackView', function () {
+        let userInput = app.getPrompts();
+        expect(userInput).to.equal("StackView");
+        done();
+    })
+
+    it('checks if function checkInput returns selector key', function () {
+        let str = ".container";
+        let key = app.checkInput(str);
+        expect(key).to.equal("container");
+       
+    })
+   
+    it.only('checks if function valArrayFunc returns array of vals', function () {
+        let str = "VideoModeSelect#videoMode";
+        let valArray = app.valArrayFunc(str);
+        expect(valArray[1]).to.equal("#videoMode");
+         str = "CvarSelect#windowMode";
+         valArray = app.valArrayFunc(str);
+        expect(valArray[1]).to.equal("#windowMode");
+    })
+})
