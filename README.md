@@ -1,8 +1,5 @@
 This is a json parse NodeJS command line app
 
-### To clone: 
-[https://github.com/louise-hayes/json-parse-node-app.git](githib)
-
 you must run npm install to install all dependencies:
 
 ```

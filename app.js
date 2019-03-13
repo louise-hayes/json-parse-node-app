@@ -14,11 +14,7 @@ let fileName = "";
 for (var i = 2; i < userInput.length; i++) {
     // Obtain the user input parameters after node app.js <filename>
     fileName = userInput[i];
-    let regex1 = RegExp('.json');
-    if (!(regex1.test(fileName))) {
-        console.log("must be type file-name.json")
-        break;
-    }
+
 };
 
 // 2 :- call async function readFile: read the file passed in by user (model.json)
@@ -63,20 +59,23 @@ utilities.readFile(fileName)
                         console.log("Sorry - No matches for your Search Criteria")
 
                     }
-                    start(); 
+                    start();
                 })
                 .catch(err => {
                     console.log("error in input " + err)
                 });
-        }//end start function
-        
+        } //end start function
+
         //after reading the file and checking it is valid call start function
         start();
     }).catch(err => {
-        console.log(" Looks like you are not giving a valid json file: Error Msg:- " + err.message);
+        let regex1 = RegExp('.json');
+        if (!(regex1.test(fileName))) {
+            console.log("must be type file-name.json")
+        } else {
+            console.log(" Looks like you are not giving a valid json file: Error Msg:- " + err.message);
+        }
     });
 
-
 //to do:
-//Add negative tetsting and validation on more functions - especially isobject function
 //search for selector chains - phase 2!
