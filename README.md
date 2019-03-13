@@ -69,7 +69,7 @@ there are 6 items:
 VideoModeSelect#videoMode
 ```
 This is an example of a compound:
-class	:	CvarSelect
-identifier	:	supersample
-Only in format class#identifier	that exist on same node.	
+{ class: 'VideoModeSelect', identifier: 'videoMode' }
+
+In format class#identifier	that exist on same node.	
 CvarSelect#supersample
