@@ -3,7 +3,7 @@ const expect = chai.expect;
 let app = require("../app");
 const jsonObj = require("../model.json");
 const proxyquire = require("proxyquire");
-const utilities = require("../utilities")
+const utilities = require("../lib/utilities")
 
 describe('Checks the Main function number of views found for a selector', function () {
 
@@ -12,7 +12,7 @@ describe('Checks the Main function number of views found for a selector', functi
             key: "classNames",
             val: "container"
         }];
-        let result = utilities.main(jsonObj, selectors)
+        let result = utilities.searchJson(jsonObj, selectors)
         expect(result.length).to.equal(6);
     });
     it('returns true if 26 classes contain Input attribute', function () {
@@ -20,7 +20,7 @@ describe('Checks the Main function number of views found for a selector', functi
             key: "class",
             val: "Input"
         }];
-        var result = utilities.main(jsonObj, selectors)
+        var result = utilities.searchJson(jsonObj, selectors)
         expect(result.length).to.equal(26);
     });
 
@@ -29,7 +29,7 @@ describe('Checks the Main function number of views found for a selector', functi
             key: "class",
             val: "StackView"
         }];
-        var result = utilities.main(jsonObj, selectors)
+        var result = utilities.searchJson(jsonObj, selectors)
         expect(result.length).to.equal(6);
     });
     it('returns true if 1 identifier contains #videoMode attribute', function () {
@@ -37,7 +37,7 @@ describe('Checks the Main function number of views found for a selector', functi
             key: "identifier",
             val: "videoMode"
         }];
-        let result = utilities.main(jsonObj, selectors)
+        let result = utilities.searchJson(jsonObj, selectors)
         expect(result.length).to.equal(1);
     });
 
@@ -54,7 +54,7 @@ describe('Checks the Main function number of views found for a selector', functi
             }
             // // {key: "classNames", val:"Input"}
         ];
-        let result = utilities.main(jsonObj, selectors)
+        let result = utilities.searchJson(jsonObj, selectors)
         expect(result.length).to.equal(3);
     });
 })
@@ -101,7 +101,7 @@ describe('Checks the pure functions', function () {
             }
         }
 
-        let utilities = proxyquire("../utilities", {
+        let utilities = proxyquire("../lib/utilities", {
             "inquirer": mockInquirer
         });
 
@@ -125,7 +125,7 @@ describe('Checks the pure functions', function () {
             }
         }
 
-        let utilities = proxyquire("../utilities", {
+        let utilities = proxyquire("../lib/utilities", {
             "inquirer": mockInquirer
         });
 
@@ -138,20 +138,23 @@ describe('Checks the pure functions', function () {
 
     it('checks if function checkInput returns selector key classNames given .container - removes #', function () {
         let str = ".container";
-        let key = utilities.checkInput(str);
+        let key = utilities.generateSelectorKey(str);
         expect(key).to.equal("classNames");
 
     })
 
-    it('checks if function valArrayFunc returns array of vals given any selector combination', function () {
+    it('checks if function parseStringToArray returns array of vals given any selector combination', function () {
         let str = "VideoModeSelect#videoMode";
-        let valArray = utilities.valArrayFunc(str);
+        let valArray = utilities.parseStringToArray(str);
         expect(valArray[1]).to.equal("#videoMode");
         str = "CvarSelect#windowMode";
-        valArray = utilities.valArrayFunc(str);
+        valArray = utilities.parseStringToArray(str);
+        expect(valArray[1]).to.equal("#windowMode");
+        str = "CvarSelect#windowMode";
+        valArray = utilities.parseStringToArray(str);
         expect(valArray[1]).to.equal("#windowMode");
         str = "StackView";
-        valArray = utilities.valArrayFunc(str);
+        valArray = utilities.parseStringToArray(str);
         expect(valArray[0]).to.equal("StackView");
     })
 })

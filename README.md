@@ -68,3 +68,8 @@ there are 6 items:
 #videoMode
 VideoModeSelect#videoMode
 ```
+This is an example of a compound:
+class	:	CvarSelect
+identifier	:	supersample
+Only in format class#identifier	that exist on same node.	
+CvarSelect#supersample

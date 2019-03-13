@@ -1,60 +1,39 @@
 // require utility functions
-const utilities = require("./utilities")
+const utilities = require("./lib/utilities")
+
+/**
+ * Initializes the App.
+ *
+ */
 
 function init() {
     // initialize variables
     let userInput = process.argv;
     let fileName = "";
-
-    // 1 :-  Capture the userInput from the "node app.js model.js" command (ignore first 2 i.e. node app.js)
+    // 1 :-  Capture the userInput from the "node app.js model.js" command 
+    // (ignore first 2 i.e. node app.js)
     for (var i = 2; i < userInput.length; i++) {
         // Obtain the user input parameters after node app.js <filename>
         fileName = userInput[i];
-
     };
-
     // 2 :- call async function readFile: read the file passed in by user (model.json)
     utilities.readFile(fileName)
-        .then(content => {
-            let result = [];
+        .then(jsonFile => {
             // console.log("2: read OK");
-            // 3 :- prompt user for selectors
-
-
             function start() {
+                // 3 :- prompt user for selectors
                 utilities.getPrompts()
                     .then(input => {
-                        // console.log("3:- have prompts going to valArrayFunc " + input)
-                        let selectors = [];
-                        let valArray = utilities.valArrayFunc(input);
-
-                        valArray.forEach(val => {
-                            let key = utilities.checkInput(val);
-                            val = val.replace(/[#.]/g, '')
-                            selectors.push({
-                                key: key,
-                                val: val
-                            });
-                        });
-                        // console.log(selectors);
-
+                        // console.log("3:- have prompts going to parseStringToArray " + input)
+                        let valArray = utilities.parseStringToArray(input);
+                        let selectorsArr = utilities.generateKeyValPairs(valArray);
                         // 4 :- call main function, pass jsonObJ and selectors
-                        // result - > show to user
-                        var result = utilities.main(content, selectors);
+                        var result = utilities.searchJson(jsonFile, selectorsArr);
                         if (!(result.length < 1 || result == undefined)) {
-
-                            console.log("----------------------------------------------------------------")
-                            console.log("                                RESULTS                         ")
-                            console.log("----------------------------------------------------------------")
-
-                            console.log(result)
-                            console.log("----------------------------------------------------------------")
-
-                            console.log("there are " + result.length + " items:");
+                            utilities.renderOut(result);
                         } else {
                             //empty
                             console.log("Sorry - No matches for your Search Criteria")
-
                         }
                         start();
                     })
