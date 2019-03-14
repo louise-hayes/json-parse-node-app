@@ -1,6 +1,6 @@
 This is a json parse NodeJS command line app
 
-you must run npm install to install all dependencies:
+You must run npm install to install all dependencies:
 
 ```
 npm install
@@ -8,13 +8,14 @@ npm install
 
 
 ### What this app does:
-A JSON object [https://jsonblob.com/e6c807db-4497-11e9-b3db-cb890192ffc6](Json object) is parsed and searched for user selectors that are input via prompt.
 
-This app assumes the json object is local file.
+It parses A JSON object, for example: [https://jsonblob.com/e6c807db-4497-11e9-b3db-cb890192ffc6] and searches for nodes/ elelements that match selectors that are input via prompt.
+
+This app assumes the json object is local file in the current working directory.
 
 ### Tests 
-This app uses Mocha and Chai testing tool.
-test files are in /test
+This app uses Mocha and Chai testing tools.
+Test files are in /test
 npm install first, the required dependencies will be installed to enable this command
 
 ```
@@ -68,8 +69,11 @@ there are 6 items:
 #videoMode
 VideoModeSelect#videoMode
 ```
-This is an example of a compound:
+This is an example of a compound as it resides in the JSON object:
 { class: 'VideoModeSelect', identifier: 'videoMode' }
 
-In format class#identifier	that exist on same node.	
+This compund sample is in the format class#identifier - they exist on the same node.	
+
+### Samples of compound input strings by user:
 CvarSelect#supersample
+VideoModeSelect#videoMode
