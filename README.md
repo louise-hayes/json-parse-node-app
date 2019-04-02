@@ -9,9 +9,9 @@ npm install
 
 ### What this app does:
 
-It parses A JSON object, for example: [https://jsonblob.com/e6c807db-4497-11e9-b3db-cb890192ffc6] and searches for nodes/ elelements that match selectors that are input via prompt.
+It parses A JSON object, for example: [https://jsonblob.com/e6c807db-4497-11e9-b3db-cb890192ffc6] and searches for nodes/elements that match selectors that are input via prompt.
 
-This app assumes the json object is local file in the current working directory.
+This app assumes the json object is a local file in the current working directory.
 
 ### Tests 
 This app uses Mocha and Chai testing tools.
