@@ -32,7 +32,7 @@ node app.js model.json
 
 ### Prompts:
 You will be presented with a prompt "Please Enter selector here:"
-This assumes you will enter a single value in the form StackView or a combination in the form VideoModeSelect#videoMode. Compund searches are enabled.
+This assumes you will enter a single value in the form StackView or a combination in the form VideoModeSelect#videoMode. Compound searches are enabled.
 
 
 ### expected output for StackView
