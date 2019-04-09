@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --ui bdd --reporter spec test"
+    "test": "./node_modules/.bin/mocha --ui bdd --reporter spec test",
+    "start": "node app.js model.json"
   },
   "author": "",
   "license": "ISC",

@@ -65,8 +65,9 @@ there are 6 items:
 
 ### Other sample inputs
 ```
-.container
-#videoMode
+.container (a className) => 6 items
+#videoMode (an identifier) => 1 item
+CvarSlider (a class) => 13 items
 VideoModeSelect#videoMode
 ```
 This is an example of a compound as it resides in the JSON object:

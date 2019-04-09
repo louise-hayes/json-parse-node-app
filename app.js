@@ -17,8 +17,8 @@ function init() {
         fileName = userInput[i];
     };
     // 2 :- call async function readFile: read the file passed in by user (model.json)
-    utilities.readFile(fileName)
-        .then(jsonFile => {
+    utilities.readFile(fileName) // 2 unit tests : one for correct file and 
+        .then(jsonFile => {      // one negative unit test for bad file type : asserts the error msg
             // console.log("2: read OK");
             function start() {
                 // 3 :- prompt user for selectors

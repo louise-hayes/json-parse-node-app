@@ -156,5 +156,8 @@ describe('Checks the pure functions', function () {
         str = "StackView";
         valArray = utilities.parseStringToArray(str);
         expect(valArray[0]).to.equal("StackView");
+        utilities.testString();
+
     })
+    
 })
