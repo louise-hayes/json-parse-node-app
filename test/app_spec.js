@@ -80,7 +80,7 @@ describe('Checks for the fileName', function () {
         //call async function readFile passing mocked filename
         // handle async return promise object with .then or reject with .catch 
 
-        utilities.readFile(fileName).then((content) => {}).catch(err => {
+        utilities.readFile(fileName).then((content) => { }).catch(err => {
             expect(err.message).to.equal("Unexpected token e in JSON at position 1")
             done()
         })
@@ -156,8 +156,29 @@ describe('Checks the pure functions', function () {
         str = "StackView";
         valArray = utilities.parseStringToArray(str);
         expect(valArray[0]).to.equal("StackView");
-        utilities.testString();
+
+
+        let result = utilities.factorialOfNum(4);
+        // console.log(result);
+        result = utilities.testPallindrome('Alla');
+        // console.log(result);
+        utilities.fizzBuzz();
+
+
+        let missingFlag = utilities.anaGram('friend', 'finder');
+        // console.log(missingFlag);
+    
+    })
+
+    it('checks if word is anagram', function () {
+        let missingFlag = utilities.anaGram('friend', 'finder');
+        console.log(missingFlag);
+        expect(missingFlag).to.equal(false);
+        let missing = utilities.anaGramComplex('friend', 'finder');
+        console.log(`is anagram ${missing}`);
+        expect(missing).to.equal(true);
+        utilities.replaceChars();
+
 
     })
-    
 })
